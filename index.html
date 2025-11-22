@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Connect - UPI Payment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #f1f5f9;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+        
+        .secured-by {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        
+        .payment-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .pay-using {
+            text-align: center;
+            margin: 15px 0;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .qr-container {
+            background: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .amount-display {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e40af;
+            margin: 10px 0;
+        }
+        
+        .upi-id {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+        
+        .service-info {
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .service-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+        
+        .service-desc {
+            font-size: 14px;
+            color: #475569;
+        }
+        
+        .apps-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .app-icon:hover {
+            transform: translateY(-3px);
+        }
+        
+        .app-icon img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+        
+        .open-app-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #3b82f6, #2563eb);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .open-app-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.6);
+        }
+        
+        .merchant-timer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .merchant-info {
+            text-align: left;
+            flex: 1;
+        }
+        
+        .merchant-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .timer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .timer-text {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #64748b;
+            font-weight: 600;
+        }
+        
+        .timer-ring {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(#3b82f6 0%, #3b82f6 var(--progress, 0%), #e2e8f0 var(--progress, 0%), #e2e8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .timer-ring::before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .timer-value {
+            position: relative;
+            font-weight: 700;
+            color: #1e40af;
+            font-size: 16px;
+        }
+        
+        .instructions {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .instructions h3 {
+            color: #1e293b;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            color: #475569;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .ref-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+        }
+        
+        .ref-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .check-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #10b981, #059669);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.6);
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s;
+            font-size: 14px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Mobile-specific optimizations */
+        @media (max-width: 480px) {
+            .payment-card {
+                padding: 20px;
+                border-radius: 18px;
+            }
+            
+            .qr-code {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .app-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .app-icon img {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .merchant-name {
+                font-size: 16px;
+            }
+            
+            .tagline {
+                font-size: 13px;
+            }
+            
+            .pay-using {
+                font-size: 16px;
+            }
+            
+            .timer-ring {
+                width: 55px;
+                height: 55px;
+            }
+            
+            .timer-ring::before {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .timer-value {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Premium Connect</h1>
+            <p>Secure Payment Gateway</p>
+            <div class="secured-by">
+                <span>Secured by</span>
+                <img src="https://accounts.razorpay.com/assets/razorpay/logo-dark.svg" alt="Razorpay Logo" height="18">
+            </div>
+        </div>
+        
+        <div class="payment-card">
+            <div class="pay-using">Pay Using UPI</div>
+            
+            <div class="qr-container">
+                <div class="qr-code">
+                    <img id="qrImage" src="" alt="UPI QR Code">
+                </div>
+                
+                <div class="amount-display" id="amountDisplay">Amount: ₹89</div>
+                <div class="upi-id">UPI ID: officialabdulzayeed@okaxis</div>
+                
+                <div class="service-info">
+                    <div class="service-name">Fund For Trade </div>
+                    <div class="service-desc">will add after payment</div>
+                </div>
+            </div>
+            
+            <div class="apps-container">
+                <div class="app-icon">
+                    <img src="https://play-lh.googleusercontent.com/0dn-CnZkqyLm5PpjdHBrYR9hvnGDNgoLTe8yfrSaPWUx7ZBVGI4C_18-jL06oNCRRCK3=w240-h480-rw" alt="Google Pay">
+                </div>
+                <div class="app-icon">
+                    <img src="https://play-lh.googleusercontent.com/6iyA2zVz5PyyMjK5SIxdUhrb7oh9cYVXJ93q6DZkmx07Er1o90PXYeo6mzL4VC2Gj9s=w240-h480-rw" alt="PhonePe">
+                </div>
+                <div class="app-icon">
+                    <img src="https://play-lh.googleusercontent.com/IWU8HM1uQuW8wVrp6XpyOOJXvb_1tDPUDAOfkrl83RZPG9Ww3dCY9X1AV6T1atSvgXc=s48-rw" alt="Paytm">
+                </div>
+                <div class="app-icon">
+                    <img src="https://play-lh.googleusercontent.com/mpbY5z1lJ7g_1o14QgqiwT5L3lynz6oKYdGV4sZBqJdtO7p_5A6t-y5GcOo1S2s4pYk=w240-h480-rw" alt="BHIM">
+                </div>
+            </div>
+            
+            <a id="upiDeepLink" href="#" class="open-app-btn">Open App & Pay</a>
+            
+            <div class="merchant-timer-container">
+                <div class="merchant-info">
+                    <div class="merchant-name">Company Name</div>
+                    <div class="tagline">INC "nexus</div>
+                </div>
+                
+                <div class="timer-container">
+                    <div class="timer-text">Expires in</div>
+                    <div class="timer-ring" id="timerRing">
+                        <div class="timer-value" id="timerValue">10:00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>Payment Instructions</h3>
+                <ol>
+                    <li>Open any UPI app on your phone</li>
+                    <li>Select 'Scan QR Code' option</li>
+                    <li>Point your camera at the QR code</li>
+                    <li>Confirm the amount and complete payment</li>
+                    <li>Save the transaction ID for reference</li>
+                </ol>
+            </div>
+            
+            <div class="ref-container">
+                <input type="text" class="ref-input" id="transactionId" placeholder="Enter 12-digit Reference ID" maxlength="12">
+                <button class="check-btn" id="submitTransaction">Check Payment Status</button>
+                <div class="error-message" id="errorMessage">
+                    ❌ Error: If Paid, Copy Reference Number and Paste in the blank
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Secure payments powered by Razorpay • Terms & Conditions Apply
+        </div>
+    </div>
+
+    <script>
+        // Get amount from URL hash
+        function getAmountFromHash() {
+            const hash = window.location.hash.substring(1);
+            const amount = parseInt(hash) || 89; // Default to 89 if no valid hash
+            return Math.max(1, amount); // Ensure at least 1 rupee
+        }
+        
+        // Set up page with the correct amount
+        function setupPage() {
+            const amount = getAmountFromHash();
+            
+            // Update amount display
+            document.getElementById('amountDisplay').textContent = `Amount: ₹${amount}`;
+            
+            // Generate QR code with amount
+            const upiId = 'officialabdulzayeed@okaxis';
+            const qrData = `upi://pay?pa=${upiId}&pn=Premium%20Connect&am=${amount}&cu=INR&tn=1%20Hour%20Call%20Booking`;
+            document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
+            
+            // Set up UPI deep link
+            document.getElementById('upiDeepLink').href = qrData;
+        }
+        
+        // Timer functionality
+        let timeLeft = 10 * 60; // 10 minutes in seconds
+        const timerValue = document.getElementById('timerValue');
+        const timerRing = document.getElementById('timerRing');
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            
+            timerValue.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update progress ring
+            const progress = 100 - (timeLeft / (10 * 60)) * 100;
+            timerRing.style.setProperty('--progress', `${progress}%`);
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                refreshQR();
+            } else {
+                timeLeft--;
+            }
+        }
+        
+        let timerInterval = setInterval(updateTimer, 1000);
+        
+        function refreshQR() {
+            // Simulate QR refresh
+            console.log("QR code refreshed");
+            timeLeft = 10 * 60;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            setupPage(); // Regenerate with current amount
+        }
+        
+        // Reference ID validation
+        const submitTransaction = document.getElementById('submitTransaction');
+        const transactionId = document.getElementById('transactionId');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        submitTransaction.addEventListener('click', () => {
+            const id = transactionId.value.trim();
+            
+            if ((id.startsWith('6903') || id.startsWith('5250')) && id.length === 12) {
+                // Valid transaction ID - redirect to success page
+                window.location.href = '/thanks-for-buying-this#paid';
+            } else {
+                // Invalid transaction ID - show error
+                errorMessage.style.display = 'block';
+            }
+        });
+        
+        // Hide error when typing
+        transactionId.addEventListener('input', () => {
+            errorMessage.style.display = 'none';
+        });
+        
+        // Initialize page
+        setupPage();
+        
+        // Update if hash changes
+        window.addEventListener('hashchange', setupPage);
+    </script>
+</body>
+</html>
