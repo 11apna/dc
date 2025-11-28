@@ -409,7 +409,7 @@
                 </div>
                 
                 <div class="amount-display" id="amountDisplay">Amount: ₹89</div>
-                <div class="upi-id">UPI ID: editing@apl</div>
+                <div class="upi-id">UPI ID: shreekrshna1992@okaxis</div>
                 
                 <div class="service-info">
                     <div class="service-name"> Scan & Pay </div>
@@ -489,7 +489,7 @@
             document.getElementById('amountDisplay').textContent = `Amount: ₹${amount}`;
             
             // Generate QR code with amount
-            const upiId = 'editing@apl';
+            const upiId = 'shreekrshna1992@okaxis';
             const qrData = `upi://pay?pa=${upiId}&pn=Premium%20Connect&am=${amount}&cu=INR&tn=1%20Hour%20Call%20Booking`;
             document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
             
